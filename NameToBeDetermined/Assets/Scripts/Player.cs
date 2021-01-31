@@ -10,8 +10,7 @@ public class Player : MonoBehaviour
     int piecesCollected = 0;
     float speed = 3f;
     bool inAir;
-    
-   
+    public Animator lydiaAnimator;
 
     // Start is called before the first frame update
     void Start()
@@ -29,6 +28,9 @@ public class Player : MonoBehaviour
         var playerInput = Input.GetAxis("Horizontal");
         var movement = speed * playerInput;
         rigidBody.velocity = new Vector3(movement, rigidBody.velocity.y, 0);
+
+        //Changes sprite from idle to running animation
+        lydiaAnimator.SetFloat("Speed", Mathf.Abs(movement));
 
         //Changes direction of sprite to face right
         if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
