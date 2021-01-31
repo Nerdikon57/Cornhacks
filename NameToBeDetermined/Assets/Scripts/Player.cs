@@ -15,11 +15,16 @@ public class Player : MonoBehaviour
     public Transform dropPoint;
     public GameObject conePrefab;
     bool canDrop = true;
-    int coneCollisionCounter;
-
+    public int timeSkipCount = 0;
+    public bool inFuture = false;
+    public int coneCollisionCounter = 0;
+    public GameObject camera1;
+    public GameObject camera2;
+    Vector3 cameraStartingSpot;
     // Start is called before the first frame update
     void Start()
     {
+        timeSkipCount = 0;
         startingSpot = transform.position;
         rigidBody = GetComponent<Rigidbody2D>();
         inAir = false;
@@ -54,23 +59,24 @@ public class Player : MonoBehaviour
                 transform.rotation = Quaternion.Euler(0, 180, 0);
             }
         }
-       
-       
+
+
 
         //Player jump
-        if (Input.GetKeyDown(KeyCode.Space) && inAir == false)//Check if space is being pressed and inAir is true. inAir exists so that you cannot jump when in the air.
+        if (Input.GetKeyDown(KeyCode.Space) && inAir == false) //Check if space is being pressed and inAir is true. inAir exists so that you cannot jump when in the air.
         {
-            rigidBody.AddForce(new Vector3(0, 220, 0));
+            rigidBody.AddForce(new Vector3(0, 250, 0));
             inAir = true;
         }
 
+        //Allows player to drop cone
         if (Input.GetKeyDown(KeyCode.R) && canDrop == true)
         {
             Instantiate(conePrefab, dropPoint.position, dropPoint.rotation);
             canDrop = false;
             coneCollisionCounter = 0;
         }
-        
+
 
     }
 
@@ -86,10 +92,12 @@ public class Player : MonoBehaviour
                 piecesCollected++;
                 Destroy(collider.gameObject);
                 break;
-            case "Obstacle": //Obstacles are anything that hurts the player, such as a spike. When we collide with one, we respawn at start.
+           case "Obstacle": //Obstacles are anything that hurts the player, such as a spike. When we collide with one, we respawn at start.
                 transform.position = startingSpot;
+                camera1.SetActive(true);
+                camera2.SetActive(false);
                 break;
-            case "End": //This is the "end" zone. Currently undetermined. 
+            case "End": //This is the "end" zone used to determine victory. 
                 if (piecesCollected > 3)
                 {
                     SceneManager.LoadScene(0);

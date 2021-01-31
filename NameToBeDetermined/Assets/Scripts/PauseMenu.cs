@@ -21,10 +21,11 @@ public class PauseMenu : MonoBehaviour
                 PauseGame();
             }
         }
-        if (Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.M))
         {
             if (isPaused)
             {
+                Time.timeScale = 1f;
                 SceneManager.LoadScene(0);
             }
             
@@ -42,9 +43,6 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 0f;
         isPaused = true;
     }
-    public void MainMenu()
-    {
-        
-    }
+   
     
 }
