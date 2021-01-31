@@ -11,6 +11,10 @@ public class Player : MonoBehaviour
     float speed = 3f;
     bool inAir;
     public Animator lydiaAnimator;
+    public Transform dropPoint;
+    public GameObject conePrefab;
+    bool canDrop = true;
+    int coneCollisionCounter;
 
     // Start is called before the first frame update
     void Start()
@@ -58,8 +62,15 @@ public class Player : MonoBehaviour
             rigidBody.AddForce(new Vector3(0, 300, 0));
             inAir = true;
         }
+
+        if (Input.GetKeyDown(KeyCode.R) && canDrop == true)
+        {
+            Instantiate(conePrefab, dropPoint.position, dropPoint.rotation);
+            canDrop = false;
+            coneCollisionCounter = 0;
+        }
         
-        
+
     }
 
     //This is a method for collision. It allows us to detect the "type" of thing we collided with. Each object is assigned a tag representing their type,
@@ -83,7 +94,15 @@ public class Player : MonoBehaviour
             case "Platform": //This is any sort of platform or ground. When we land on it, we are no longer in air. 
                 inAir = false;
                 break;
+            case "Cone":
+                if (coneCollisionCounter > 0) { 
+                Destroy(collider.gameObject);
+                canDrop = true;
 
         }
+                coneCollisionCounter++;
+                break;
+        }
     }
+ 
 }
