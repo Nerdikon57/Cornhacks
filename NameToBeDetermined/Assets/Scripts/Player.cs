@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class Player : MonoBehaviour
 {
@@ -8,7 +9,7 @@ public class Player : MonoBehaviour
     Vector3 startingSpot;
     Rigidbody2D rigidBody;
     int piecesCollected = 0;
-    float speed = 3f;
+    float speed = 1.3f;
     bool inAir;
     public Animator lydiaAnimator;
     public Transform dropPoint;
@@ -59,7 +60,7 @@ public class Player : MonoBehaviour
         //Player jump
         if (Input.GetKeyDown(KeyCode.Space) && inAir == false)//Check if space is being pressed and inAir is true. inAir exists so that you cannot jump when in the air.
         {
-            rigidBody.AddForce(new Vector3(0, 300, 0));
+            rigidBody.AddForce(new Vector3(0, 220, 0));
             inAir = true;
         }
 
@@ -89,7 +90,11 @@ public class Player : MonoBehaviour
                 transform.position = startingSpot;
                 break;
             case "End": //This is the "end" zone. Currently undetermined. 
-                //I have no freaking clue yet
+                if (piecesCollected > 3)
+                {
+                    SceneManager.LoadScene(0);
+                }
+                
                 break;
             case "Platform": //This is any sort of platform or ground. When we land on it, we are no longer in air. 
                 inAir = false;

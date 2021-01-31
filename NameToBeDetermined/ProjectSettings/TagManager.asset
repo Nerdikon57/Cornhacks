@@ -9,6 +9,8 @@ TagManager:
   - Obstacle
   - Paper
   - Cone
+  - ConeDrop
+  - End
   layers:
   - Default
   - TransparentFX

@@ -23,11 +23,11 @@ public class TimeSkipMovement : MonoBehaviour
             timeSkipCount++;
             if (timeSkipCount % 2 == 0)
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y - 20, transform.position.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y - 50, transform.position.z);
             }
             else
             {
-                transform.position = new Vector3(transform.position.x, transform.position.y + 20, transform.position.z);
+                transform.position = new Vector3(transform.position.x, transform.position.y + 50, transform.position.z);
             }
 
 
