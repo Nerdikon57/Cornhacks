@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
     Rigidbody2D rigidBody;
     int piecesCollected = 0;
     float speed = 3f;
-    bool canJump;
+    bool inAir;
     
    
 
@@ -18,7 +18,7 @@ public class Player : MonoBehaviour
     {
         startingSpot = transform.position;
         rigidBody = GetComponent<Rigidbody2D>();
-        canJump = true;
+        inAir = false;
        
     }
 
@@ -30,11 +30,31 @@ public class Player : MonoBehaviour
         var movement = speed * playerInput;
         rigidBody.velocity = new Vector3(movement, rigidBody.velocity.y, 0);
 
+        //Changes direction of sprite to face right
+        if (Input.GetKeyDown(KeyCode.D) || Input.GetKeyDown(KeyCode.RightArrow))
+        {
+            if (transform.rotation != Quaternion.Euler(0, 0, 0))
+            {
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+        }
+
+        //Changes direction of sprite to face left
+        if (Input.GetKeyDown(KeyCode.A) || Input.GetKeyDown(KeyCode.LeftArrow))
+        {
+            if (transform.rotation != Quaternion.Euler(0, 180, 0))
+            {
+                transform.rotation = Quaternion.Euler(0, 180, 0);
+            }
+        }
+       
+       
+
         //Player jump
-        if (Input.GetKeyDown(KeyCode.Space) && canJump == true)//Check if space is being pressed and canJump is true. canJump exists so that you cannot jump when not on the ground.
+        if (Input.GetKeyDown(KeyCode.Space) && inAir == false)//Check if space is being pressed and inAir is true. inAir exists so that you cannot jump when in the air.
         {
             rigidBody.AddForce(new Vector3(0, 300, 0));
-            canJump = false;
+            inAir = true;
         }
         
         
@@ -47,8 +67,8 @@ public class Player : MonoBehaviour
         var tag = collider.tag;
         switch (tag)
         {
-            case "MachinePiece": //These are collectable items, so each time we collide with one it gets destroyed, and the counter for how many we have goes up by one
-                canJump = true;
+            case "Paper": //These are collectable items, so each time we collide with one it gets destroyed, and the counter for how many we have goes up by one
+                inAir = false;
                 piecesCollected++;
                 Destroy(collider.gameObject);
                 break;
@@ -58,8 +78,8 @@ public class Player : MonoBehaviour
             case "End": //This is the "end" zone. Currently undetermined. 
                 //I have no freaking clue yet
                 break;
-            case "Platform": //This is any sort of platform or ground. When we land on it, it resents our ability to jump to true. 
-                canJump = true;
+            case "Platform": //This is any sort of platform or ground. When we land on it, we are no longer in air. 
+                inAir = false;
                 break;
 
         }
